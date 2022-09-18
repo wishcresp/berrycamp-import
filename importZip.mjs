@@ -32,13 +32,13 @@ const MAP_NAME_REGEXP = /^(?:(?<order>\d+)(?<side>[ABCHX]?)\-)?(?<name>.+?)(?:\-
 
 const [,, areaArg, zipArg, nameArg, authorArg, linkArg] = process.argv;
 
-// try {
-//   // Create the temp dir.
-//   fs.mkdirSync(TEMP_DIR);
-// } catch {}
+try {
+  // Create the temp dir.
+  fs.mkdirSync(TEMP_DIR);
+} catch {}
 
-// // Extract to the temp dir.
-// await exec(`7z x ${zipArg} "-o${TEMP_DIR}/${areaArg}"`);
+// Extract to the temp dir.
+await exec(`7z x ${zipArg} "-o${TEMP_DIR}/${areaArg}"`);
 
 const modDir = `${TEMP_DIR}/${areaArg}`;
 
