@@ -1,0 +1,24 @@
+{
+  "areaId": "",
+  "name": "",
+  "author": "",
+  "link": "",
+  "chapters": [
+    {
+      "id": "",
+      "gameId": "",
+      "name": "",
+      "sides": [
+        {
+          "file": "",
+          "checkpoints": [
+            {
+              "name": "",
+              "abv": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
