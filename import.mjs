@@ -47,14 +47,16 @@ for (const {id, gameId, name, sides} of chapters) {
   };
 
   for (const {file, checkpoints} of sides) {
+    console.log(`Processing ${file}`);
+
     const {stdout} = await exec(`julia loadMap.jl maps/${file}.bin`, {maxBuffer: 64 * 1024 * 1024});
     const {rooms} = JSON.parse(stdout);
 
     let cpIdx = 0;
 
-    const c = checkpoints.map(({name: n, abv: a, order: o}) => ({n, a, o}));
+    const c = checkpoints.map(({name: n, abv: a}) => ({n, a})).slice(1);
     
-    const r = rooms.map(({name, position: [x, y], size: [w, h], entities}) => ({
+    const unorderedRooms = rooms.map(({name, position: [x, y], size: [w, h], entities}) => ({
       i: name.slice(4),
       p: {x, y},
       s: {w, h},
@@ -67,6 +69,14 @@ for (const {id, gameId, name, sides} of chapters) {
       }).map(({id: i, name, data: {x, y, checkpointID: c, order: o}}) => ({t: entityTypes.get(name), i, x, y, c, o})),
     }));
 
+    // Order the rooms.
+    const r = [
+      ...checkpoints.reduce((acc, {order}) => {
+        acc.push(...order)
+        return acc;
+      }, []).map(id => unorderedRooms.find(r => r.i === id)),
+    ];
+    
     chapter.s.push({c, r});
   };
   

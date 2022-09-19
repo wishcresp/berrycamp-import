@@ -38,9 +38,10 @@ try {
 } catch {}
 
 // Extract to the temp dir.
-await exec(`7z x ${zipArg} "-o${TEMP_DIR}/${areaArg}"`);
-
 const modDir = `${TEMP_DIR}/${areaArg}`;
+if (!fs.existsSync(modDir)) {
+  await exec(`7z x "${zipArg}" "-o${modDir}"`);
+}
 
 // Find the maps and sort them under their parent areas.
 const areaEntries = [];
@@ -111,7 +112,10 @@ for (const [areaId, maps] of areaEntries) {
     }
 
     // Get the side data.
-    const {stdout} = await exec(`julia loadMap.jl maps/${map}.bin`, {maxBuffer: MAX_MAP_OUTPUT_BYTES});
+    const mapPath = `${areaDir}/${areaId}/${map}.bin`;
+    console.log(`Loading map ${mapPath}`);
+
+    const {stdout} = await exec(`julia loadMap.jl "${mapPath}"`, {maxBuffer: MAX_MAP_OUTPUT_BYTES});
     const {rooms} = JSON.parse(stdout);
 
     const c = [];
