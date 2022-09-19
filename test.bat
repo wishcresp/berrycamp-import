@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File ps_test.ps1
